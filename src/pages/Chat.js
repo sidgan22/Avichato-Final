@@ -254,17 +254,19 @@ export default class Chat extends Component {
             this.setState({ writeError: error.message });
         }
     }
-     addmem(){
+    addmem(){
+
+        var xx = prompt("Enter channel ID","ID");
         var channelmem=prompt("Enter user id to add: " , "");
-        var kid = this.state.cchannelid;
-        console.log(channelmem+kid);
+        // var kid = this.cchannelid;
+        console.log(channelmem);
         const usRef = db.ref().child('users/' + channelmem + "/cid");
                 usRef.on("value", function (snapshot) {
                     console.log("snap:" + snapshot.val());
                 });
                 console.log("User id is " + channelmem);
                 usRef.transaction(function (current_value) {
-                    return (current_value || "") + " " + kid;
+                    return (current_value || "") + " " + xx;
                 });
     }
 
@@ -327,7 +329,7 @@ export default class Chat extends Component {
                                 {this.state.cname}
                             </button>
                             
-                        <button className="btn btn-link" nClick={this.addmem}>+ Add members</button>
+                        <button className="btn btn-link" onClick={this.addmem}>+ Add members</button>
                         </div>
                         <br></br>
                         <hr></hr>

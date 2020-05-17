@@ -82,7 +82,7 @@ export default class ChatG extends Component {
           {this.state.chats.map(chat => {
             return <p key={chat.timestamp} className={"chat-bubble " + (this.state.user.uid === chat.uid ? "current-user" : "")}>
 
-              <span className="chat-time float-right">{auth().currentUser.displayName}<br></br>{this.formatTime(chat.timestamp)}<br></br></span>
+              <span className="chat-time float-right"><br></br>{this.formatTime(chat.timestamp)}<br></br></span>
               <br></br>{chat.content}
               <br></br>
 
