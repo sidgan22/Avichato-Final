@@ -1,0 +1,82 @@
+
+/*
+** NOTE FORM
+*/
+div.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  padding: 5px;
+  background-color:white;
+  border: 2px solid #4CAF50;
+}
+.noteform {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    margin: 20px auto 15px;
+    
+  }
+  .noteform h3 {
+
+    color: #171717;
+  }
+  .noteform .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  
+  /*
+  ** NOTES LIST
+  */
+
+.wrapper {
+  border: 2px solid #f76707;
+  border-radius: 5px;
+  background-color: #fff4e6;
+}
+
+.wrapper > div {
+  border: 2px solid orange;
+  border-radius: 5px;
+  background-color: orange;
+  padding: 1em;
+  color:blue;
+}
+h3{
+  justify-self: start;
+
+}
+.wrapper {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+grid-gap: 10px;
+}
+
+
+  .notes .note .note-title .remove {
+    color: #FF0000;
+    font-size: 24px;
+    float: right;
+    font-weight: 700;
+  }
+  
+  .notes .note .note-content {
+    padding: 15px;
+  }
+.notee{
+  border:1px solid gray;
+  align-items: initial;
+}
+main {
+    padding: 50px;
+    overflow: scroll;
+  }
+
+  rating {
+    display: flex;
+    flex-direction: row;
+    justify-content: center
+}

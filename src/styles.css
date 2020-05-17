@@ -39,12 +39,52 @@
 
 @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
 @media screen and (min-width:766px) {
+    .profimg{
+        width:100%;
+
+    }
+    .prof{
+        margin-top: 100px;
+    }
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        margin-top: 100px;
+        margin: auto;
+        text-align: center;
+        font-family: arial;
+      }
+      
+      .title {
+        color: grey;
+        font-size: 18px;
+      }
+      
+      button.ct {
+        border: none;
+        outline: 0;
+        display: inline-block;
+        padding: 8px;
+        color: white;
+        background-color: #000;
+        text-align: center;
+        cursor: pointer;
+        width: 100%;
+        font-size: 18px;
+      }
+      
+      
+      button.ct:hover, a:hover {
+        opacity: 0.7;
+      }
+      
+
     .channelinfo{
         height:20px;
     }
     .channelnames{
         padding-top: 30px;
-        padding-left: 30px;
+        padding-left: 10px;
     }
     .create-channel{
         
@@ -82,7 +122,7 @@
     }
     .chat-area .chat-bubble {
         background-color: #bbdefb;
-        padding: 15px;
+        padding: 10px;
         border-radius: 4px;
         max-width: 300px;
         word-wrap: break-word;
@@ -124,6 +164,8 @@
     body {
         font-family: 'Poppins', sans-serif;
         background-color: #fcfcfc;
+    }
+    .notscroll{
         overflow: hidden;
     }
     .containers {
@@ -132,10 +174,112 @@
         width: 50%;
         float: left;
     }
+    /* Popup box BEGIN */
+.hover_bkgr_fricc{
+    background:rgba(0,0,0,.4);
+    cursor:pointer;
+    display:none;
+    height:100%;
+    position:fixed;
+    text-align:center;
+    top:0;
+    width:100%;
+    z-index:10000;
+}
+.hover_bkgr_fricc .helper{
+    display:inline-block;
+    height:100%;
+    vertical-align:middle;
+}
+.hover_bkgr_fricc > div {
+    background-color: #fff;
+    box-shadow: 10px 10px 60px #555;
+    display: inline-block;
+    height: auto;
+    max-width: 551px;
+    min-height: 100px;
+    vertical-align: middle;
+    width: 60%;
+    position: relative;
+    border-radius: 8px;
+    padding: 15px 5%;
+}
+.popupCloseButton {
+    background-color: #fff;
+    border: 3px solid #999;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial;
+    font-weight: bold;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 25px;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+.popupCloseButton:hover {
+    background-color: #ccc;
+}
+.trigger_popup_fricc {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 20px;
+    display: inline-block;
+    font-weight: bold;
+}
+/* Popup box BEGIN */
+
 }
 
 @media screen and (max-width: 766px) {
-    /* .chat-list {
+    .profimg{
+        width:100%;
+
+    }
+    .prof{
+        margin-top: 100px;
+    }
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        margin-top: 100px;
+        margin: auto;
+        text-align: center;
+        font-family: arial;
+      }
+      
+      .title {
+        color: grey;
+        font-size: 18px;
+      }
+      
+      button.ct {
+        border: none;
+        outline: 0;
+        display: inline-block;
+        padding: 8px;
+        color: white;
+        background-color: #000;
+        text-align: center;
+        cursor: pointer;
+        width: 100%;
+        font-size: 18px;
+      }
+      
+      
+      button.ct:hover, a:hover {
+        opacity: 0.7;
+      }
+      
+
+    .notes {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    .chat-list {
         display: none;
         width: 25%;
         float: left;
@@ -218,7 +362,7 @@
     }
     .chat-area .chat-bubble {
         max-width: 275px;
-    } */
+    }
 }
 
 

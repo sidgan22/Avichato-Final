@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import {  signInWithGoogle } from "../helpers/auth";
 import logo  from "../images/avilight.jpg";
 
+import { db } from "../services/firebase";
+
 export default class Login extends Component {
   constructor() {
     super();
@@ -35,8 +37,26 @@ export default class Login extends Component {
   async googleSignIn() {
     try {
         this.setState({ loading: true });
-      await signInWithGoogle();
+      var x=await signInWithGoogle();
+      if(x.additionalUserInfo.isNewUser){
+        var uidadmin = x.user.uid;
+        const uRefN = db.ref().child('users/'+uidadmin+"/name");
+           console.log("User id is "+uidadmin);
+           uRefN.transaction(function (current_value) {
+             return (current_value || "") + x.user.email;
+           });
+           const uRefP = db.ref().child('users/'+uidadmin+"/photoURL");
+           console.log("User id is "+uidadmin);
+           uRefP.transaction(function (current_value) {
+             return (current_value || "") + x.user.photoURL;
+           });
 
+           const uRefc = db.ref().child('users/'+uidadmin+"/cid");
+           console.log("User id is "+uidadmin);
+           uRefc.transaction(function (current_value) {
+             return (current_value || "") +"";
+           });
+      }
       this.setState({ loading: false });
     } catch (error) {
       this.setState({ error: error.message });

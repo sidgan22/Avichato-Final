@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { signup, signInWithGoogle } from "../helpers/auth";
 import logo  from "../images/avilight.jpg";
+import { db } from "../services/firebase";
+
+// import { auth } from "../services/firebase";
 
 
 export default class SignUp extends Component {
@@ -12,6 +15,7 @@ export default class SignUp extends Component {
       error: null,
       email: '',
       password: '',
+      loading:false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,7 +40,29 @@ export default class SignUp extends Component {
 
   async googleSignIn() {
     try {
-      await signInWithGoogle();
+      this.setState({loading:true});
+      var x = await signInWithGoogle();
+      if(x.additionalUserInfo.isNewUser){
+        var uidadmin = x.user.uid;
+        const uRefN = db.ref().child('users/'+uidadmin+"/name");
+           console.log("User id is "+uidadmin);
+           uRefN.transaction(function (current_value) {
+             return (current_value || "") + x.user.email;
+           });
+           const uRefP = db.ref().child('users/'+uidadmin+"/photoURL");
+           console.log("User id is "+uidadmin);
+           uRefP.transaction(function (current_value) {
+             return (current_value || "") + x.user.photoURL;
+           });
+           const uRefc = db.ref().child('users/'+uidadmin+"/cid");
+           console.log("User id is "+uidadmin);
+           uRefc.transaction(function (current_value) {
+             return (current_value || "") +"";
+           });
+          this.setState({loading:false});
+      }
+      
+    
     } catch (error) {
       this.setState({ error: error.message });
     }
@@ -45,6 +71,8 @@ export default class SignUp extends Component {
 
 
   render() {
+
+    const {loading} = this.state;
     return (
         <div>
             <div className='left'>
@@ -58,7 +86,9 @@ export default class SignUp extends Component {
           <Link className="title ml-2" to="/">Avichato</Link>
           </h1>
           <button className="btn btn-danger mr-2" type="button" onClick={this.googleSignIn}>
-            Sign up with Google
+          {loading ? <div className="spinner-border text-success" role="status">
+            <span className="sr-only">Loading...</span>
+          </div> : "Sign up with Google"}
           </button>
           <hr></hr>
           <p>Already have an account? <Link to="/login">Login</Link></p>

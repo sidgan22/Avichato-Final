@@ -9,8 +9,11 @@ import Home from "./pages/Home";
 import Chat from "./pages/Chat";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Task from "./pages/Task";
 import { auth } from "./services/firebase";
+import ChatG from "./pages/GrpChat";
 import './styles.css';
+import Profile from "./pages/Profile";
 
 function PrivateRoute({ component: Component, authenticated, ...rest }) {
   return (
@@ -37,7 +40,7 @@ function PublicRoute({ component: Component, authenticated, ...rest }) {
         authenticated === false ? (
           <Component {...props} />
         ) : (
-            <Redirect to="/chat" />
+              <Redirect to="/" />
           )
       }
     />
@@ -82,6 +85,21 @@ class App extends Component {
               path="/chat"
               authenticated={this.state.authenticated}
               component={Chat}
+            />
+            <PrivateRoute
+              path="/chatgrp"
+              authenticated={this.state.authenticated}
+              component={ChatG}
+            />
+            <PrivateRoute
+              path="/tasks"
+              authenticated={this.state.authenticated}
+              component={Task}
+            />
+            <PrivateRoute
+              path="/profile"
+              authenticated={this.state.authenticated}
+              component={Profile}
             />
             <PublicRoute
               path="/signup"
