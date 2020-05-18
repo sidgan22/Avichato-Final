@@ -189,6 +189,7 @@ export default class Chat extends Component {
                 };
                 var keyid = ref.push(data);
                 var kid = (await keyid).key;
+                
                 const uKey = db.ref().child('users/' + uidadmin + "/").key;
                 console.log("Key is:" + uKey);
                 const uRef = db.ref().child('users/' + uidadmin + "/cid");
@@ -255,12 +256,18 @@ export default class Chat extends Component {
         }
     }
     addmem(){
-
         var xx = prompt("Enter channel ID","ID");
         var channelmem=prompt("Enter user id to add: " , "");
         // var kid = this.cchannelid;
         console.log(channelmem);
-        const usRef = db.ref().child('users/' + channelmem + "/cid");
+
+        console.log("ccod: "+this.state.cchannelid);
+        const reff=db.ref().child('users/');
+        reff.on("value",function(snapshot){
+            snapshot.forEach((snap)=>{
+                if(snap.val()===channelmem)
+                {
+                    const usRef = db.ref().child('users/' + channelmem + "/cid");
                 usRef.on("value", function (snapshot) {
                     console.log("snap:" + snapshot.val());
                 });
@@ -268,6 +275,11 @@ export default class Chat extends Component {
                 usRef.transaction(function (current_value) {
                     return (current_value || "") + " " + xx;
                 });
+                }
+
+            });
+        });
+        
     }
 
     formatTime(timestamp) {
@@ -340,7 +352,7 @@ export default class Chat extends Component {
                                     <p key={chat.timestamp} className={"chat-bubble " + (this.state.user.uid === chat.uid ? "current-user" : "nc-user")}>
                                         <div className='sender float-right'>~{chat.name}</div><br></br>
                                         {chat.content}
-                                        <br /><br />
+                                        <br/><br />
                                         <span className="chat-time float-right">{this.formatTime(chat.timestamp)}</span><br></br>
                                     </p>
                                 </div>

@@ -3,7 +3,6 @@ import Header from "../components/Header";
 import { db, auth } from "../services/firebase";
 
 
-import NotesForm from './NotesForm';
 import Notes from './Notes';
 import '../notes.css';
 
@@ -69,11 +68,10 @@ class Task extends Component {
                 <Header />
 
                 <div className="sticky">
-                    <NotesForm />
+                    
                     </div>
+                    <br></br>
                 <main>
-
-                    {/* <button onClick={this.sortData}>SORT</button> */}
                     <Notes notes={this.state.notes} />
                 </main>
             </div>
