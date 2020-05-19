@@ -17,7 +17,8 @@ export default class Chat extends Component {
             cchannelid: "",
             writeError: null,
             loadingChats: false,
-            loading: false
+            loading: false,
+            adminid:'',
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -32,7 +33,7 @@ export default class Chat extends Component {
 
          this.renderChatss();
     }
-    
+
     async createChats() {
         var uidadmin = auth().currentUser.uid;
         var str = "";
@@ -107,6 +108,12 @@ export default class Chat extends Component {
                 // console.log(snapshot.val());
                 cname = snapshot.val();
                 this.setState({ cname: cname });
+            });
+            db.ref('channels/' + cchannelid + '/admin').on("value", snapshot => {
+                let adminid = "";
+                // console.log(snapshot.val());
+                adminid = snapshot.val();
+                this.setState({ adminid: adminid });
             });
             db.ref("channels/" + cchannelid + "/chats").on("value", snapshot => {
                 let chats = [];
@@ -189,7 +196,7 @@ export default class Chat extends Component {
                 };
                 var keyid = ref.push(data);
                 var kid = (await keyid).key;
-                
+
                 const uKey = db.ref().child('users/' + uidadmin + "/").key;
                 console.log("Key is:" + uKey);
                 const uRef = db.ref().child('users/' + uidadmin + "/cid");
@@ -235,7 +242,7 @@ export default class Chat extends Component {
 
 
     }
-    
+
     async handleSubmit(event) {
         event.preventDefault();
         this.setState({ writeError: null });
@@ -255,12 +262,22 @@ export default class Chat extends Component {
             this.setState({ writeError: error.message });
         }
     }
-    addmem(){
-        var xx = prompt("Enter channel ID","ID");
+    async leavechannel(){
+      prompt("Do u want to leave the channel u will lose access.");
+      db.ref().child('users/'+auth().currentUser.uid+'/cid/'+this.state.cchannelid).remove();
+      window.location.reload();
+    }
+    async deletechannel(){
+      console.log(this.state.adminid);
+      console.log(auth().currentUser.userid);
+      prompt("Do u want to delete the channel all members will lose access.");
+        db.ref().child('channel/'+this.state.adminid).delete();
+    }
+    async addmem(){
         var channelmem=prompt("Enter user id to add: " , "");
         // var kid = this.cchannelid;
         console.log(channelmem);
-
+        var xx = this.state.cchannelid;
         console.log("ccod: "+this.state.cchannelid);
         const reff=db.ref().child('users/');
         reff.on("value",function(snapshot){
@@ -279,7 +296,7 @@ export default class Chat extends Component {
 
             });
         });
-        
+
     }
 
     formatTime(timestamp) {
@@ -340,8 +357,9 @@ export default class Chat extends Component {
 
                                 {this.state.cname}
                             </button>
-                            
+
                         <button className="btn btn-link" onClick={this.addmem}>+ Add members</button>
+                        {auth().currentUser.uid===this.state.adminid?<button className="btn btn-link" onClick={this.deletechannel}>- Remove Channel</button>:<button className="btn btn-link" onClick={this.leavechannel}>- Leave Channel</button>}
                         </div>
                         <br></br>
                         <hr></hr>
@@ -446,7 +464,7 @@ export default class Chat extends Component {
 //                 // listofcs=str;
 //                 console.log(this.state.listofc);
 //             });
-            
+
 //             // this.setState({ listofc });
 //             console.log("list of chat "+this.state.listofc);
 //         }
@@ -454,9 +472,9 @@ export default class Chat extends Component {
 //             console.log(error);
 //         }
 //         this.setState({ loadingChats: false });
-        
+
 //         this.renderChatsss();
-       
+
 //     }
 //     async renderChatss() {
 
@@ -491,7 +509,7 @@ export default class Chat extends Component {
 //     }
 
 //     async renderChatsss() {
-        
+
 //         try {
 
 //             await db.ref('channels').on("value", snapshot => {
@@ -501,7 +519,7 @@ export default class Chat extends Component {
 //                 let x = "";
 //                 snapshot.forEach((snap) => {
 
-                    
+
 //                     x = snap.key;
 //                     console.log("Chn List " + this.state.listofc);
 //                     var listdummy = this.state.listofc;
@@ -668,9 +686,9 @@ export default class Chat extends Component {
 //                                 <div className="channelnames">
 //                                     {/* <li ></li> */}
 //                                      <button key={lchat.channelID} className="btn btn-dark" onClick={() => {
-                                        
+
 //                                         this.setState({ cchannelid: lchat.channelID });
-                                    
+
 //                                         }}>{lchat.name}</button>
 
 //                                 </div>
@@ -695,7 +713,7 @@ export default class Chat extends Component {
 //                                 {/* {this.state.cname} */}
 //                             </button>
 //                         </div>}
-                        
+
 //                         <hr />
 //                         {/* chat area */}
 //                         {this.state.chats.map(chat => {
@@ -731,10 +749,3 @@ export default class Chat extends Component {
 //     }
 // }
 // export default Chat;
-
-
-
-
-
-
-

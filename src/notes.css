@@ -15,7 +15,7 @@
     width: 100%;
     max-width: 480px;
     margin: 20px auto 15px;
-    
+
   }
   .noteform h3 {
 
@@ -26,12 +26,12 @@
     flex-direction: column;
     margin-bottom: 15px;
   }
-  
-  
+
+
   /*
   ** NOTES LIST
   */
-/* 
+/*
 .wrapper {
   border: 2px solid #f76707;
   border-radius: 5px;
@@ -62,7 +62,7 @@ grid-gap: 10px;
     float: right;
     font-weight: 700;
   }
-  
+
   .notes .note .note-content {
     padding: 15px;
   }
@@ -79,7 +79,7 @@ main {
     display: flex;
     flex-direction: row;
     justify-content: center
-} */ 
+} */
 
 body {
   margin: 0;
@@ -106,7 +106,7 @@ ul li {
   background: #eee;
   font-size: 18px;
   transition: 0.2s;
-  
+
   /* make the list items unselectable */
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -180,19 +180,26 @@ input {
   margin: 0;
   border: none;
   border-radius: 0;
-  width: 75%;
+  width: 100%;
   padding: 10px;
-  float: left;
+  float: center;
   font-size: 16px;
 }
+h3{
+  float: center;
+}
 
+.removenotes{
+  padding-left: 100px;
+  color: red;
+}
 /* Style the "Add" button */
 .addBtn {
   padding: 10px;
-  width: 25%;
+  width: 100%;
   background: #d9d9d9;
   color: #555;
-  float: left;
+  float: center;
   text-align: center;
   font-size: 16px;
   cursor: pointer;
