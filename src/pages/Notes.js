@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { db, auth } from "../services/firebase";
-
+import '../notes.css';
 
 
 export class Notes extends Component {

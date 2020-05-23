@@ -14,6 +14,7 @@ import { auth } from "./services/firebase";
 import ChatG from "./pages/GrpChat";
 import './styles.css';
 import Profile from "./pages/Profile";
+import TaskMan from "./pages/TaskMan";
 
 function PrivateRoute({ component: Component, authenticated, ...rest }) {
   return (
@@ -85,6 +86,11 @@ class App extends Component {
               path="/chat"
               authenticated={this.state.authenticated}
               component={Chat}
+            />
+            <PrivateRoute
+              path="/taskmanager"
+              authenticated={this.state.authenticated}
+              component={TaskMan}
             />
             <PrivateRoute
               path="/chatgrp"

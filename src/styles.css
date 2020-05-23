@@ -83,7 +83,7 @@
         height:20px;
     }
     .channelnames{
-        padding-top: 30px;
+        padding-top: 5px;
         padding-left: 10px;
     }
     .create-channel{
@@ -231,11 +231,50 @@
     display: inline-block;
     font-weight: bold;
 }
+.dropdown{
+    display: none;
+}
 /* Popup box BEGIN */
 
 }
 
 @media screen and (max-width: 766px) {
+   
+    .dropbtn {
+        display: flex;
+        background-color: #FFA500;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+      }
+      
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+      
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+      
+      .dropdown-content a:hover {background-color: #ddd;}
+      
+      .dropdown:hover .dropdown-content {display: block;}
+      
+      .dropdown:hover .dropbtn {background-color: #FFA500;}
     .profimg{
         width:100%;
 
@@ -279,15 +318,7 @@
     .notes {
         grid-template-columns: repeat(3, 1fr);
       }
-    .chat-list {
-        display: none;
-        width: 25%;
-        float: left;
-        padding: 10px;
-        height: 100%;
-        overflow-y: scroll;
-        border: 0.4px solid rgba(0, 0, 0, 0.25);
-    }
+    
     .chat-area,
     .home,
     .chat-list {

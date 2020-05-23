@@ -18,9 +18,10 @@ export default class Chat extends Component {
             writeError: null,
             loadingChats: false,
             loading: false,
-            adminid:'',
+            adminid: '',
         };
         this.handleChange = this.handleChange.bind(this);
+        
         this.handleSubmit = this.handleSubmit.bind(this);
         this.myRef = React.createRef();
 
@@ -31,7 +32,7 @@ export default class Chat extends Component {
         this.setState({ readError: null });
         this.createChats();
 
-         this.renderChatss();
+        this.renderChatss();
     }
 
     async createChats() {
@@ -42,7 +43,7 @@ export default class Chat extends Component {
             db.ref('users/' + uidadmin + "/cid").on("value", snapshot => {
                 str += snapshot.val();
                 console.log("Str is : " + str);
-                this.state.listofc.splice(0,this.state.listofc.length);
+                this.state.listofc.splice(0, this.state.listofc.length);
                 this.state.listofc.push(str.split(" "));
                 // listofcs=str;
                 console.log(this.state.listofc);
@@ -169,6 +170,16 @@ export default class Chat extends Component {
                         return (current_value);
                     }
                 });
+
+
+                const ussRef = db.ref().child('channels/' + kid + "/uid");
+                ussRef.on("value", function (snapshot) {
+                    console.log("snap:" + snapshot.val());
+                });
+                // console.log("User id is " + channelmem);
+                ussRef.transaction(function (current_value) {
+                    return (current_value || "") + " " +uidadmin;
+                });
             }
             catch (error) {
                 console.log(error);
@@ -180,7 +191,7 @@ export default class Chat extends Component {
     async createChannel(event) {
         var txt;
         var channelname = prompt("Please enter channel name:", "Channel name");
-        var channelmem = prompt("Add members: ", "sid")
+        var channelmem = prompt("Add members: ", "USER SHARABLE ID")
         if (channelname === null || channelname === "" || channelmem === null || channelmem === "") {
             txt = "User cancelled the prompt.";
 
@@ -192,7 +203,8 @@ export default class Chat extends Component {
                 var data = {
                     name: channelname,
                     channelID: "",
-                    admin: uidadmin
+                    admin: uidadmin,
+                    uid: uidadmin
                 };
                 var keyid = ref.push(data);
                 var kid = (await keyid).key;
@@ -208,6 +220,7 @@ export default class Chat extends Component {
                     return (current_value || "") + " " + kid;
                 });
                 //uRef.update(datas);
+
                 const usRef = db.ref().child('users/' + channelmem + "/cid");
                 uRef.on("value", function (snapshot) {
                     console.log("snap:" + snapshot.val());
@@ -216,11 +229,24 @@ export default class Chat extends Component {
                 usRef.transaction(function (current_value) {
                     return (current_value || "") + " " + kid;
                 });
+
+
+
+
+                const ussRef = db.ref().child('channels/' + kid + "/uid");
+                ussRef.on("value", function (snapshot) {
+                    console.log("snap:" + snapshot.val());
+                });
+                // console.log("User id is " + channelmem);
+                ussRef.transaction(function (current_value) {
+                    return (current_value || "") + " " + channelmem+" "+uidadmin;
+                });
                 db.ref().child("channels/" + kid).set(
                     {
                         channelID: kid,
                         name: channelname,
-                        admin: uidadmin
+                        admin: uidadmin,
+                        uid:uidadmin+" "+channelmem
                     }
                 );
                 txt = "Channel " + channelname + " created.";
@@ -248,54 +274,88 @@ export default class Chat extends Component {
         this.setState({ writeError: null });
         var cchannelid = this.state.cchannelid == null ? "1" : this.state.cchannelid.toString();
         const chatArea = this.myRef.current;
-        if(this.state.content!=null)
-        try {
-            await db.ref("channels/" + cchannelid + "/chats").push({
-                content: this.state.content,
-                timestamp: Date.now(),
-                uid: this.state.user.uid,
-                name: this.state.user.displayName
+        if (this.state.content != null)
+            try {
+                await db.ref("channels/" + cchannelid + "/chats").push({
+                    content: this.state.content,
+                    timestamp: Date.now(),
+                    uid: this.state.user.uid,
+                    name: this.state.user.displayName
+                });
+                this.setState({ content: '' });
+                chatArea.scrollBy(0, chatArea.scrollHeight);
+            } catch (error) {
+                this.setState({ writeError: error.message });
+            }
+    }
+    async leavechannel() {
+        console.log("Leave chan S");
+        var x = prompt("Do u want to leave the channel u will lose access.", "Y/N");
+
+        var ccid = prompt("Enter channel id to confirm.", "");
+        if (x) {
+            const uleave = db.ref().child('users/' + auth().currentUser.uid + '/cid/');
+            uleave.transaction(function (current_value) {
+                console.log("Current"+current_value);
+                var current_val=current_value.replace(ccid,"");
+                console.log("Changed"+current_val);
+                return current_val;
             });
-            this.setState({ content: '' });
-            chatArea.scrollBy(0, chatArea.scrollHeight);
-        } catch (error) {
-            this.setState({ writeError: error.message });
+            const uleaves = db.ref().child('channels/' + ccid + '/uid/');
+            uleaves.transaction(function (current_value) {
+                console.log("Current"+current_value);
+                var current_val=current_value.replace(auth().currentUser.uid,"");
+                console.log("Changed"+current_val);
+                return current_val;
+            });
         }
+
+        console.log("Leave chan E");
+        window.location.reload();
+
+
     }
-    async leavechannel(){
-      prompt("Do u want to leave the channel u will lose access.");
-      db.ref().child('users/'+auth().currentUser.uid+'/cid/'+this.state.cchannelid).remove();
-      window.location.reload();
+    
+
+    async deletechannel() {
+        // console.log(this.state.adminid);
+        // console.log(auth().currentUser.userid);
+        prompt("Do u want to delete the channel all members will lose access.");
+        // db.ref().child('channel/' + this.state.adminid).delete();
     }
-    async deletechannel(){
-      console.log(this.state.adminid);
-      console.log(auth().currentUser.userid);
-      prompt("Do u want to delete the channel all members will lose access.");
-        db.ref().child('channel/'+this.state.adminid).delete();
-    }
-    async addmem(){
-        var channelmem=prompt("Enter user id to add: " , "");
+    async addmem() {
         // var kid = this.cchannelid;
+        var ccid = prompt("Enter channel id to confirm before adding", "");
+
+        var channelmem = prompt("Enter user id to add: ", "");
+
         console.log(channelmem);
-        var xx = this.state.cchannelid;
-        console.log("ccod: "+this.state.cchannelid);
-        const reff=db.ref().child('users/');
-        reff.on("value",function(snapshot){
-            snapshot.forEach((snap)=>{
-                if(snap.val()===channelmem)
-                {
-                    const usRef = db.ref().child('users/' + channelmem + "/cid");
-                usRef.on("value", function (snapshot) {
+        // var xx = this.state.cchannelid;
+        // console.log("ccod: " + this.state.cchannelid);
+        // const reff = db.ref().child('users/');
+        // reff.on("value", function (snapshot) {
+        //     snapshot.forEach((snap) => {
+        //         if (snap.val() === channelmem) {
+        //             const usRef = db.ref().child('users/' + channelmem + "/cid");
+        //             usRef.transaction(function (current_value) {
+        //                 return (current_value || "") + " " + ccid;
+        //             });
+        //         }
+
+        //     });
+        // });
+        const usRef = db.ref().child('users/' + channelmem + "/cid");
+                    usRef.transaction(function (current_value) {
+                        return (current_value || "") + " " + ccid;
+                    });
+        const ussRef = db.ref().child('channels/' + ccid + "/uid");
+                ussRef.on("value", function (snapshot) {
                     console.log("snap:" + snapshot.val());
                 });
-                console.log("User id is " + channelmem);
-                usRef.transaction(function (current_value) {
-                    return (current_value || "") + " " + xx;
+                // console.log("User id is " + channelmem);
+                ussRef.transaction(function (current_value) {
+                    return (current_value || "") + " " +channelmem;
                 });
-                }
-
-            });
-        });
 
     }
 
@@ -318,24 +378,30 @@ export default class Chat extends Component {
 
                         <div className="create-channel">
 
-                            <button className="btn btn-success mr-4" onClick={this.createChannel}>+ Create Channel"</button>
+                            <button className="btn btn-success mr-4" onClick={this.createChannel}>+ Create Channel</button>
 
                             <button className="btn btn-warning" onClick={this.joinChannel}>+ Join channel</button>
                         </div>
                         <hr></hr>
+                        <br></br>
+                        <h4 className="ml-2">  Channels</h4>
                         {this.createChats}
                         {this.state.listchats.map(lchat => {
                             return (
+
+
                                 <div className="channelnames">
                                     {/* <li ></li> */}
                                     {this.state.loadingChats ? <div className="spinner-border text-success" role="status">
                                         <span className="sr-only">Loading...</span>
-                                    </div> : <button key={lchat.channelID} className="btn btn-primary btn-lg btn-block" onClick={() => {
+                                    </div> : <button key={lchat.channelID} className="btn btn-link" onClick={() => {
                                         // this.state.cchannelid=lchat.channelID;
                                         this.setState({ cchannelid: lchat.channelID });
                                         this.renderChatss();
-                                    }}>{lchat.name}</button>}
+                                    }}># {lchat.name}</button>}
                                 </div>
+
+
                             );
                         })}
 
@@ -350,16 +416,16 @@ export default class Chat extends Component {
                             <span className="sr-only">Loading...</span>
                         </div> : ""}
                         <div className="channelinfo">
-                            <button className="btn-secondary btn" onClick={() => {
-                                var disp =this.state.cchannelid;
-                                alert("Channel ID: "+disp);
+                            <button className="btn-success btn" onClick={() => {
+                                var disp = this.state.cchannelid;
+                                alert("Channel ID: " + disp);
                             }}>
 
                                 {this.state.cname}
                             </button>
 
-                        <button className="btn btn-link" onClick={this.addmem}>+ Add members</button>
-                        {auth().currentUser.uid===this.state.adminid?<button className="btn btn-link" onClick={this.deletechannel}>- Remove Channel</button>:<button className="btn btn-link" onClick={this.leavechannel}>- Leave Channel</button>}
+                            <button className="btn btn-link" onClick={this.addmem}>+ Add members</button>
+                            {auth().currentUser.uid === this.state.adminid ? <button className="btn btn-link" onClick={this.deletechannel}>- Remove Channel</button> : <button className="btn btn-link" onClick={this.leavechannel}>- Leave Channel</button>}
                         </div>
                         <br></br>
                         <hr></hr>
@@ -370,7 +436,7 @@ export default class Chat extends Component {
                                     <p key={chat.timestamp} className={"chat-bubble " + (this.state.user.uid === chat.uid ? "current-user" : "nc-user")}>
                                         <div className='sender float-right'>~{chat.name}</div><br></br>
                                         {chat.content}
-                                        <br/><br />
+                                        <br /><br />
                                         <span className="chat-time float-right">{this.formatTime(chat.timestamp)}</span><br></br>
                                     </p>
                                 </div>

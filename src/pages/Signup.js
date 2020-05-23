@@ -45,18 +45,24 @@ export default class SignUp extends Component {
       if(x.additionalUserInfo.isNewUser){
         var uidadmin = x.user.uid;
         const uRefN = db.ref().child('users/'+uidadmin+"/name");
-           console.log("User id is "+uidadmin);
+          //  console.log("User id is "+uidadmin);
            uRefN.transaction(function (current_value) {
              return (current_value || "") + x.user.email;
            });
            const uRefP = db.ref().child('users/'+uidadmin+"/photoURL");
-           console.log("User id is "+uidadmin);
+          //  console.log("User id is "+uidadmin);
            uRefP.transaction(function (current_value) {
              return (current_value || "") + x.user.photoURL;
            });
            const uRefc = db.ref().child('users/'+uidadmin+"/cid");
-           console.log("User id is "+uidadmin);
+          //  console.log("User id is "+uidadmin);
            uRefc.transaction(function (current_value) {
+             return (current_value || "") +"";
+           });
+
+           const uReft = db.ref().child('users/'+uidadmin+"/tid");
+          //  console.log("User id is "+uidadmin);
+           uReft.transaction(function (current_value) {
              return (current_value || "") +"";
            });
           this.setState({loading:false});

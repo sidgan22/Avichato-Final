@@ -14,7 +14,7 @@ export default class HomePage extends Component {
                 <Header></Header>
                 <section>
                     <div className="container text-center py-5">
-                        <img src={logo} class="img-responsive" height="200" alt="logo"></img>
+                        <img src={logo} className="img-responsive" height="200" alt="logo"></img>
                         <h1 className="display-4">Avichato</h1>
                         <p className="lead">Team colab by Aviato</p>
                         {auth().currentUser?null:<div className="mt-4">

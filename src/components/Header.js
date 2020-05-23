@@ -14,9 +14,10 @@ function Header() {
           {auth().currentUser
             ? <div className="navbar-nav nav light-gray">
               <Link className="nav-item nav-link mr-3" to="/profile">Profile</Link> 
+              <Link className="nav-item nav-link mr-3" to="/taskmanager">My Tasks</Link> 
               <Link className="nav-item nav-link mr-3" to="/chatgrp">OpenChat</Link> 
               <Link className="nav-item nav-link mr-3" to="/chat">Chat</Link> 
-              <Link className="nav-item nav-link mr-3" to="/tasks">My Tasks</Link>
+              <Link className="nav-item nav-link mr-3" to="/tasks">Notes</Link>
               <Link className="nav-item nav-link mr-3 btn-danger" to="/chat" onClick={() => auth().signOut()}>Logout</Link> 
                </div>
             : <div className="navbar-nav">
