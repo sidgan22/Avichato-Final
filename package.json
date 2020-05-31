@@ -11,6 +11,7 @@
     "express": "^4.17.1",
     "firebase": "^7.14.4",
     "install": "^0.13.0",
+    "moment": "^2.26.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-datepicker": "^2.16.0",
